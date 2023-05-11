@@ -1,0 +1,102 @@
+﻿<Window x:Class="MicroHardness.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MicroHardness"
+        xmlns:ScottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
+        mc:Ignorable="d"
+        Title="MicroHardness" Height="600" Width="600"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Image Source="/View/Assets/matres.jpg" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" />
+
+        <TextBlock Grid.Column="1"
+                   FontSize="30"
+                   Text="Analisi dei dati di microdurezza"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center" />
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <Button x:Name="LoadCsv"
+                        Content="Carica CSV"
+                        Margin="5"
+                        Click="LoadCsv_Click" />
+                <Button x:Name="Print"
+                        Content="Stampa report (PDF)"
+                        Margin="5" Click="Print_Click" />
+                <Button Content="Uscire" Margin="5" Click="Close_Click" />
+            </StackPanel>
+            <Button Content="About"
+                    Margin="5"
+                    Click="About_Click"
+                    Grid.Row="1" />
+        </Grid>
+        <TabControl Grid.Column="1" Grid.Row="1">
+            <TabItem Header="Dati" x:Name="Data">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.7*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <DataGrid AutoGenerateColumns="True"
+                              Name="rawData"
+                              ItemsSource="{Binding}"
+                              IsReadOnly="True"
+                              ColumnWidth="*"
+                              CanUserResizeColumns="False"
+                              CanUserResizeRows="False"
+                              SelectionUnit="Cell"
+                              AlternatingRowBackground="LightBlue">
+                    </DataGrid>
+                    <Grid Grid.Column="1" x:Name="Results">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="0 0 10 0">
+                            <TextBlock Text="Campione" HorizontalAlignment="Right" />
+                            <TextBlock Text="Media ± Dev. Std." HorizontalAlignment="Right" />
+                            <TextBlock Text="Minimo" HorizontalAlignment="Right" />
+                            <TextBlock Text="Massimo" HorizontalAlignment="Right" />
+                            <TextBlock Text="1º Quartile (25%)" HorizontalAlignment="Right" />
+                            <TextBlock Text="3º Quartile (75%)" HorizontalAlignment="Right" />
+                            <TextBlock Text="Mediana" HorizontalAlignment="Right" />
+                            <TextBlock Text="Quantità di misure" HorizontalAlignment="Right" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBox x:Name="hvSample" IsReadOnly="True" BorderThickness="0" />
+                            <TextBox x:Name="hvMeanStd" IsReadOnly="True" BorderThickness="0" />
+                            <TextBox x:Name="hvMin" IsReadOnly="True" BorderThickness="0" />
+                            <TextBox x:Name="hvMax" IsReadOnly="True" BorderThickness="0" />
+                            <TextBox x:Name="hv25" IsReadOnly="True" BorderThickness="0" />
+                            <TextBox x:Name="hv75" IsReadOnly="True" BorderThickness="0" />
+                            <TextBox x:Name="hvMedian" IsReadOnly="True" BorderThickness="0" />
+                            <TextBox x:Name="hvPointCount" IsReadOnly="True" BorderThickness="0" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Line Plot" x:Name="LineTab">
+                <ScottPlot:WpfPlot x:Name="LinePlot" />
+            </TabItem>
+            <TabItem Header="Box Plot" x:Name="BoxTab">
+                <ScottPlot:WpfPlot x:Name="BoxPlot" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
