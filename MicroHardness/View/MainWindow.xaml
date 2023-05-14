@@ -34,17 +34,26 @@
             <StackPanel>
                 <Button x:Name="LoadCsv"
                         Content="Carica CSV"
-                        Margin="5"
-                        Click="LoadCsv_Click" />
+                        Margin="5 20 "
+                        Click="LoadCsv_Click"
+                        Height="50" />
                 <Button x:Name="Print"
-                        Content="Stampa report (PDF)"
-                        Margin="5" Click="Print_Click" />
-                <Button Content="Uscire" Margin="5" Click="Close_Click" />
+                        Content="Stampa files per report"
+                        Margin="5" Click="Print_Click"
+                        Height="50" />
+                <Button Content="Uscire"
+                        Margin="5 50"
+                        Click="Close_Click"
+                        Height="50" />
             </StackPanel>
-            <Button Content="About"
-                    Margin="5"
-                    Click="About_Click"
-                    Grid.Row="1" />
+            <StackPanel Grid.Row="1">
+                <Button Content="Known Issues"
+                        Margin="5"
+                        Click="Issues_Click" />
+                <Button Content="About"
+                        Margin="5"
+                        Click="About_Click" />
+            </StackPanel>
         </Grid>
         <TabControl Grid.Column="1" Grid.Row="1">
             <TabItem Header="Dati" x:Name="Data">
@@ -69,32 +78,50 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Margin="0 0 10 0">
-                            <TextBlock Text="Campione" HorizontalAlignment="Right" />
-                            <TextBlock Text="Media ± Dev. Std." HorizontalAlignment="Right" />
-                            <TextBlock Text="Minimo" HorizontalAlignment="Right" />
-                            <TextBlock Text="Massimo" HorizontalAlignment="Right" />
-                            <TextBlock Text="1º Quartile (25%)" HorizontalAlignment="Right" />
-                            <TextBlock Text="3º Quartile (75%)" HorizontalAlignment="Right" />
-                            <TextBlock Text="Mediana" HorizontalAlignment="Right" />
-                            <TextBlock Text="Quantità di misure" HorizontalAlignment="Right" />
+                            <TextBlock Text="Campione: "
+                                       HorizontalAlignment="Right" />
+                            <TextBlock Text="Media ± Dev. Std.: "
+                                       HorizontalAlignment="Right" />
+                            <TextBlock Text="Minimo: "
+                                       HorizontalAlignment="Right" />
+                            <TextBlock Text="Massimo: "
+                                       HorizontalAlignment="Right" />
+                            <TextBlock Text="1º Quartile (25%): "
+                                       HorizontalAlignment="Right" />
+                            <TextBlock Text="3º Quartile (75%): "
+                                       HorizontalAlignment="Right" />
+                            <TextBlock Text="Mediana: "
+                                       HorizontalAlignment="Right" />
+                            <TextBlock Text="Quantità di misure: "
+                                       HorizontalAlignment="Right" />
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <TextBox x:Name="hvSample" IsReadOnly="True" BorderThickness="0" />
-                            <TextBox x:Name="hvMeanStd" IsReadOnly="True" BorderThickness="0" />
-                            <TextBox x:Name="hvMin" IsReadOnly="True" BorderThickness="0" />
-                            <TextBox x:Name="hvMax" IsReadOnly="True" BorderThickness="0" />
-                            <TextBox x:Name="hv25" IsReadOnly="True" BorderThickness="0" />
-                            <TextBox x:Name="hv75" IsReadOnly="True" BorderThickness="0" />
-                            <TextBox x:Name="hvMedian" IsReadOnly="True" BorderThickness="0" />
-                            <TextBox x:Name="hvPointCount" IsReadOnly="True" BorderThickness="0" />
+                            <TextBox x:Name="hvSample" IsReadOnly="True"
+                                     BorderThickness="0" />
+                            <TextBox x:Name="hvMeanStd" IsReadOnly="True"
+                                     BorderThickness="0" />
+                            <TextBox x:Name="hvMin" IsReadOnly="True"
+                                     BorderThickness="0" />
+                            <TextBox x:Name="hvMax" IsReadOnly="True"
+                                     BorderThickness="0" />
+                            <TextBox x:Name="hv25" IsReadOnly="True"
+                                     BorderThickness="0" />
+                            <TextBox x:Name="hv75" IsReadOnly="True"
+                                     BorderThickness="0" />
+                            <TextBox x:Name="hvMedian" IsReadOnly="True"
+                                     BorderThickness="0" />
+                            <TextBox x:Name="hvPointCount" IsReadOnly="True"
+                                     BorderThickness="0" />
                         </StackPanel>
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Line Plot" x:Name="LineTab">
+            <TabItem Header="Line Plot"
+                     x:Name="LineTab">
                 <ScottPlot:WpfPlot x:Name="LinePlot" />
             </TabItem>
-            <TabItem Header="Box Plot" x:Name="BoxTab">
+            <TabItem Header="Box Plot"
+                     x:Name="BoxTab">
                 <ScottPlot:WpfPlot x:Name="BoxPlot" />
             </TabItem>
         </TabControl>

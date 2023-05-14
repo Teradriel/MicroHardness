@@ -21,6 +21,10 @@ using MathNet.Numerics;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
+using System.ComponentModel;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using MathNet.Numerics.LinearAlgebra.Factorization;
+using Microhardness.View;
 
 namespace MicroHardness.View
 {
@@ -29,6 +33,12 @@ namespace MicroHardness.View
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Issues_Click(object sender, RoutedEventArgs e)
+        {
+            KnownIssues knownIssues = new KnownIssues();
+            knownIssues.ShowDialog();
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -138,39 +148,14 @@ namespace MicroHardness.View
 
         private void Print_Click(object sender, RoutedEventArgs e)
         {
-            string path = "\\\\svr2012\\Laboratorio Analisi\\Dati Strumenti\\Microdurometro\\2023" + $"{hvSample.Text}";
-            //string path = System.IO.Path.Combine(Environment.CurrentDirectory, $"{hvSample.Text}");
+            if (hvSample.Text == "") return;
+
+            //string path = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023" + $"{hvSample.Text}";
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
             Directory.CreateDirectory(path);
+            LinePlot.Plot.SaveFig(path + $"/{hvSample.Text}_LinePlot.png");
 
-            TabControl.SetIsSelected(LineTab, true);
-            SaveFileDialog saveLine = new()
-            {
-                Filter = "PNG Files (*.png)|*.png" +
-                         "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
-                         "|BMP Files (*.bmp)|*.bmp" +
-                         "|All files (*.*)|*.*"
-            };
-            saveLine.InitialDirectory = path;
-            saveLine.FileName = $"{hvSample.Text}_LinePlot.png";
-            if (saveLine.ShowDialog() == true)
-            {
-                LinePlot.Plot.SaveFig(path + $"/{hvSample.Text}_LinePlot.png");
-            }
-
-            TabControl.SetIsSelected(BoxTab, true);
-            SaveFileDialog saveBox = new()
-            {
-                Filter = "PNG Files (*.png)|*.png" +
-                         "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
-                         "|BMP Files (*.bmp)|*.bmp" +
-                         "|All files (*.*)|*.*"
-            };
-            saveBox.InitialDirectory = path;
-            saveBox.FileName = $"{hvSample.Text}_BoxPlot.png";
-            if (saveBox.ShowDialog() == true)
-            {
-                BoxPlot.Plot.SaveFig(path + $"/{hvSample.Text}_BoxPlot.png");
-            }
+            BoxPlot.Plot.SaveFig(path + $"/{hvSample.Text}_BoxPlot.png");
 
             TabControl.SetIsSelected(Data, true);
 
@@ -210,24 +195,33 @@ namespace MicroHardness.View
                 combined.Add(string.Format("{0} {1}", firstColumn, secondColumn));
             }
 
-            SaveFileDialog dataDialog = new()
+            System.IO.File.WriteAllLines(path + $"/{hvSample.Text}_Riasunto.txt", combined);
+
+            rawData.SelectAllCells();
+            rawData.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, rawData);
+            rawData.UnselectAllCells();
+
+            Excel.Application xlexcel;
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
+            object misValue = System.Reflection.Missing.Value;
+            xlexcel = new Excel.Application
             {
-                Filter = "Text Files(*.txt)|*.txt|All(*.*)|*"
+                Visible = true
             };
-            dataDialog.FileName = $"{hvSample.Text}_Riasunto";
-            dataDialog.InitialDirectory = path;
-            if (dataDialog.ShowDialog() == true)
-            {
-                System.IO.File.WriteAllLines(dataDialog.FileName, combined);
-            }
+            xlWorkBook = xlexcel.Workbooks.Add(misValue);
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            Excel.Range CR = (Excel.Range)xlWorkSheet.Cells[1, 1];
+            CR.Select();
+            xlWorkSheet.PasteSpecial(CR, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true);
 
-            //rawData.SelectAllCells();
-            //rawData.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            //ApplicationCommands.Copy.Execute(null, rawData);
-            //rawData.UnselectAllCells();
+            xlWorkBook.SaveAs(path + $"/{hvSample.Text}_Dati.xlsx", Excel.XlFileFormat.xlWorkbookDefault, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            xlexcel.DisplayAlerts = true;
+            xlWorkBook.Close(true, misValue, misValue);
+            xlexcel.Quit();
 
-            //using var workbook = new XLWorkbook();
-            //var worksheet = workbook.AddWorksheet("Dati");
+            Clipboard.Clear();
         }
     }
 }

@@ -139,43 +139,23 @@ namespace MicroHardness.View
         {
             if (hvSample.Text == "") return;
 
-            string path = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023" + $"{hvSample.Text}";
+            //string path = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023" + $"{hvSample.Text}";
             //string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
-            Directory.CreateDirectory(path);
 
-            TabControl.SetIsSelected(LineTab, true);
-            SaveFileDialog saveLine = new SaveFileDialog
+            SaveFileDialog saveAll = new SaveFileDialog
             {
-                Filter = "PNG Files (*.png)|*.png" +
-                         "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
-                         "|BMP Files (*.bmp)|*.bmp" +
-                         "|All files (*.*)|*.*",
-                InitialDirectory = path,
-                FileName = $"{hvSample.Text}_LinePlot.png"
+                Filter = "All files (*.*)|*.*",
+                InitialDirectory = Environment.CurrentDirectory,
+                FileName = $"{hvSample.Text}"
             };
-            if (saveLine.ShowDialog() == true)
+            if (saveAll.ShowDialog() == true)
             {
+                string path = saveAll.FileName;
+                Directory.CreateDirectory(path);
                 LinePlot.Plot.SaveFig(path + $"/{hvSample.Text}_LinePlot.png");
-            }
-
-            TabControl.SetIsSelected(BoxTab, true);
-            SaveFileDialog saveBox = new SaveFileDialog
-            {
-                Filter = "PNG Files (*.png)|*.png" +
-                         "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
-                         "|BMP Files (*.bmp)|*.bmp" +
-                         "|All files (*.*)|*.*",
-                InitialDirectory = path,
-                FileName = $"{hvSample.Text}_BoxPlot.png"
-            };
-            if (saveBox.ShowDialog() == true)
-            {
                 BoxPlot.Plot.SaveFig(path + $"/{hvSample.Text}_BoxPlot.png");
-            }
 
-            TabControl.SetIsSelected(Data, true);
-
-            List<string> reference = new List<string>()
+                List<string> reference = new List<string>()
             {
                 "Campione:",
                 "Media e Dev. Std.:",
@@ -187,7 +167,7 @@ namespace MicroHardness.View
                 "Quantità di misure:"
             };
 
-            List<string> results = new List<string>()
+                List<string> results = new List<string>()
             {
                 hvSample.Text,
                 hvMeanStd.Text,
@@ -199,66 +179,46 @@ namespace MicroHardness.View
                 hvPointCount.Text,
             };
 
-            List<string> combined = new List<string>();
-            int count = reference.Count >= results.Count ? reference.Count : results.Count;
-            for (int i = 0; i < count; i++)
-            {
-                string firstColumn = reference.Count <= i ? "" : reference[i];
-                string secondColumn = results.Count <= i ? "" : results[i];
+                List<string> combined = new List<string>();
+                int count = reference.Count >= results.Count ? reference.Count : results.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    string firstColumn = reference.Count <= i ? "" : reference[i];
+                    string secondColumn = results.Count <= i ? "" : results[i];
 
-                firstColumn += new string(' ', 19 - firstColumn.Length);
+                    firstColumn += new string(' ', 19 - firstColumn.Length);
 
-                combined.Add(string.Format("{0} {1}", firstColumn, secondColumn));
-            }
+                    combined.Add(string.Format("{0} {1}", firstColumn, secondColumn));
+                }
+                System.IO.File.WriteAllLines(path + $"/{hvSample.Text}_Riasunto.txt", combined);
 
-            SaveFileDialog dataDialog = new SaveFileDialog
-            {
-                Filter = "Text Files(*.txt)|*.txt|All(*.*)|*",
-                FileName = $"{hvSample.Text}_Riasunto",
-                InitialDirectory = path
-            };
-            if (dataDialog.ShowDialog() == true)
-            {
-                System.IO.File.WriteAllLines(dataDialog.FileName, combined);
-            }
+                rawData.SelectAllCells();
+                rawData.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+                ApplicationCommands.Copy.Execute(null, rawData);
+                rawData.UnselectAllCells();
+                string result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue); //TODO: formatear rawData decimales
 
-            rawData.SelectAllCells();
-            rawData.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            ApplicationCommands.Copy.Execute(null, rawData);
-            rawData.UnselectAllCells();
-            string result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue); //TODO: formatear rawData decimales
+                result = result.Replace('"', ' ');
 
-            result = result.Replace('"', ' ');
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                var dataExcel = new ExcelPackage();
 
-            var dataExcel = new ExcelPackage();
+                var dataSheet = dataExcel.Workbook.Worksheets.Add("Dati");
 
-            var dataSheet = dataExcel.Workbook.Worksheets.Add("Dati");
+                var format = new ExcelTextFormat
+                {
+                    Delimiter = ','
+                };
 
-            var format = new ExcelTextFormat
-            {
-                Delimiter = ','
-            };
+                var ts = TableStyles.None;
 
-            var ts = TableStyles.None;
+                dataSheet.Cells["A1"].LoadFromText(result, format, ts, true);
 
-            dataSheet.Cells["A1"].LoadFromText(result, format, ts, true);
-
-            SaveFileDialog excelDialog = new SaveFileDialog
-            {
-                Filter = "Excel Files(*.xlsx)|*.xlsx|All(*.*)|*",
-                FileName = $"{hvSample.Text}_Dati.xlsx",
-                InitialDirectory = path
-            };
-            if (excelDialog.ShowDialog() == true)
-            {
                 dataExcel.SaveAs(new FileInfo(path + $"/{hvSample.Text}_Dati.xlsx"));
             }
 
             Clipboard.Clear();
-
-            Close();
         }
     }
 }

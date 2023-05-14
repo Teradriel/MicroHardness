@@ -13,11 +13,16 @@
         </Grid.RowDefinitions>
         <StackPanel>
             <TextBlock Text="Known Issues:" FontSize="40" />
-            <TextBlock Text="- Excel file is not well formated and it wont be usable" FontSize="25" />
-            <TextBlock Text="- Save file name will not be taken into account as the name is hardcoded with previous considerations" FontSize="25" TextWrapping="Wrap" />
             <TextBlock Text="- Charts only prints if tab is selected first"
                        FontSize="25" />
         </StackPanel>
-        <Button Content="OK" Grid.Row="1" Height="50" HorizontalAlignment="Center" Width=" 150" Margin="50" Click="Close_Click" />
+        <Button Content="OK"
+                Grid.Row="1"
+                Height="50"
+                HorizontalAlignment="Center"
+                Width=" 150"
+                Margin="50"
+                Click="Close_Click"
+                FontSize="25" />
     </Grid>
 </Window>
