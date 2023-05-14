@@ -147,7 +147,10 @@ namespace MicroHardness.View
 
         private void Print_Click(object sender, RoutedEventArgs e)
         {
-            string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
+            if (hvSample.Text == "") return;
+
+            string path = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023" + $"{hvSample.Text}";
+            //string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
             Directory.CreateDirectory(path);
 
             TabControl.SetIsSelected(LineTab, true);
