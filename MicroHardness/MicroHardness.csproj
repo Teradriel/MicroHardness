@@ -5,8 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+	  <SelfContained>true</SelfContained>
 	<PublishSingleFile>true</PublishSingleFile>
-	<SelfContained>true</SelfContained>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationIcon>View\Assets\hardness.ico</ApplicationIcon>
   </PropertyGroup>
