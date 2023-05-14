@@ -1,0 +1,21 @@
+﻿<Window x:Class="Microhardness.View.KnownIssues"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Microhardness.View"
+        mc:Ignorable="d"
+        Title="KnownIssues" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Text="Known Issues:" FontSize="40" />
+            <TextBlock Text="- Excel file is not well formated and it wont be usable" FontSize="25" />
+            <TextBlock Text="- Save file name will not be taken into account as the name is hardcoded with previous considerations" FontSize="25" TextWrapping="Wrap" />
+        </StackPanel>
+        <Button Content="OK" Grid.Row="1" Height="50" HorizontalAlignment="Center" Width=" 150" Margin="50" Click="Close_Click" />
+    </Grid>
+</Window>

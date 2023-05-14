@@ -1,0 +1,51 @@
+﻿<Window x:Class="MicroHardness.View.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MicroHardness.View"
+        mc:Ignorable="d"
+        Title="AboutWindow" Height="250" Width="400">
+    <Grid>
+        <StackPanel VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="Made with love, sweat and blood by Luca Terzariol"
+                       FontSize="16" />
+            <TextBlock Text="MATRES SCRL"
+                       FontSize="16"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="All lefts reserved"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="For more information please contact me:"
+                       Margin="0 50 0 0"
+                       HorizontalAlignment="Center" />
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <TextBlock Margin="15 5">
+                    <Hyperlink ToolTip="luca.terzariol@outlook.com"
+                               TextDecorations="None"
+                               NavigateUri="mailto:luca.terzariol@outlook.com"
+                               RequestNavigate="OnNavigate">
+                        <Image Source="/View/Assets/mail.png"  Height="25" />
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock Margin="15 5">
+                    <Hyperlink ToolTip="https://github.com/Teradriel"
+                               TextDecorations="None"
+                               NavigateUri="https://github.com/Teradriel"
+                               RequestNavigate="OnNavigate">
+                        <Image Source="/View/Assets/github.png" Height="25" />
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock HorizontalAlignment="Center" Margin="0 35 0 0">
+                You can edit the source code visiting
+                <Hyperlink
+                    Click="Gif_Link"
+                    ToolTip="WOW! very changes, many code, such window">
+                    this link
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>

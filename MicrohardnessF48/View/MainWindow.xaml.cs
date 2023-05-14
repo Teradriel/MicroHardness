@@ -18,9 +18,12 @@ using System.Windows.Shapes;
 using ScottPlot;
 using MathNet.Numerics.Statistics;
 using MathNet.Numerics;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
-using ClosedXML.Excel;
+using OfficeOpenXml;
+using System.Windows.Media.Animation;
+using System.Data;
+using OfficeOpenXml.Table;
+using System.Globalization;
+using Microhardness.View;
 
 namespace MicroHardness.View
 {
@@ -31,6 +34,12 @@ namespace MicroHardness.View
             InitializeComponent();
         }
 
+        private void Issues_Click(object sender, RoutedEventArgs e)
+        {
+            KnownIssues knownIssues = new KnownIssues();
+            knownIssues.ShowDialog();
+        }
+
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -38,17 +47,17 @@ namespace MicroHardness.View
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            AboutWindow aboutWindow = new();
+            AboutWindow aboutWindow = new AboutWindow();
             aboutWindow.ShowDialog();
         }
 
         public void LoadCsv_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new()
+            OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = "CSV Files only (*.csv)|*.csv"
+                Filter = "CSV Files only (*.csv)|*.csv",
+                InitialDirectory = Environment.CurrentDirectory
             };
-            openFileDialog.InitialDirectory = Environment.CurrentDirectory;
             if (openFileDialog.ShowDialog() == true)
             {
                 string path = openFileDialog.FileName;
@@ -69,11 +78,11 @@ namespace MicroHardness.View
                     double value = hvArray[i];
                     if (value < quantileBottom)
                     {
-                        hvStatistics = hvStatistics.Where(value => value != hvArray[i]).ToArray();
+                        hvStatistics = hvStatistics.Where(x => x != hvArray[i]).ToArray();
                     }
                     else if (value > quantileUpper)
                     {
-                        hvStatistics = hvStatistics.Where(value => value != hvArray[i]).ToArray();
+                        hvStatistics = hvStatistics.Where(x => x != hvArray[i]).ToArray();
                     }
                 }
 
@@ -138,35 +147,34 @@ namespace MicroHardness.View
 
         private void Print_Click(object sender, RoutedEventArgs e)
         {
-            string path = "\\\\svr2012\\Laboratorio Analisi\\Dati Strumenti\\Microdurometro\\2023" + $"{hvSample.Text}";
-            //string path = System.IO.Path.Combine(Environment.CurrentDirectory, $"{hvSample.Text}");
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
             Directory.CreateDirectory(path);
 
             TabControl.SetIsSelected(LineTab, true);
-            SaveFileDialog saveLine = new()
+            SaveFileDialog saveLine = new SaveFileDialog
             {
                 Filter = "PNG Files (*.png)|*.png" +
                          "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
                          "|BMP Files (*.bmp)|*.bmp" +
-                         "|All files (*.*)|*.*"
+                         "|All files (*.*)|*.*",
+                InitialDirectory = path,
+                FileName = $"{hvSample.Text}_LinePlot.png"
             };
-            saveLine.InitialDirectory = path;
-            saveLine.FileName = $"{hvSample.Text}_LinePlot.png";
             if (saveLine.ShowDialog() == true)
             {
                 LinePlot.Plot.SaveFig(path + $"/{hvSample.Text}_LinePlot.png");
             }
 
             TabControl.SetIsSelected(BoxTab, true);
-            SaveFileDialog saveBox = new()
+            SaveFileDialog saveBox = new SaveFileDialog
             {
                 Filter = "PNG Files (*.png)|*.png" +
                          "|JPG Files (*.jpg, *.jpeg)|*.jpg;*.jpeg" +
                          "|BMP Files (*.bmp)|*.bmp" +
-                         "|All files (*.*)|*.*"
+                         "|All files (*.*)|*.*",
+                InitialDirectory = path,
+                FileName = $"{hvSample.Text}_BoxPlot.png"
             };
-            saveBox.InitialDirectory = path;
-            saveBox.FileName = $"{hvSample.Text}_BoxPlot.png";
             if (saveBox.ShowDialog() == true)
             {
                 BoxPlot.Plot.SaveFig(path + $"/{hvSample.Text}_BoxPlot.png");
@@ -174,7 +182,7 @@ namespace MicroHardness.View
 
             TabControl.SetIsSelected(Data, true);
 
-            List<string> reference = new()
+            List<string> reference = new List<string>()
             {
                 "Campione:",
                 "Media e Dev. Std.:",
@@ -186,7 +194,7 @@ namespace MicroHardness.View
                 "Quantità di misure:"
             };
 
-            List<string> results = new()
+            List<string> results = new List<string>()
             {
                 hvSample.Text,
                 hvMeanStd.Text,
@@ -198,7 +206,7 @@ namespace MicroHardness.View
                 hvPointCount.Text,
             };
 
-            List<string> combined = new();
+            List<string> combined = new List<string>();
             int count = reference.Count >= results.Count ? reference.Count : results.Count;
             for (int i = 0; i < count; i++)
             {
@@ -210,24 +218,54 @@ namespace MicroHardness.View
                 combined.Add(string.Format("{0} {1}", firstColumn, secondColumn));
             }
 
-            SaveFileDialog dataDialog = new()
+            SaveFileDialog dataDialog = new SaveFileDialog
             {
-                Filter = "Text Files(*.txt)|*.txt|All(*.*)|*"
+                Filter = "Text Files(*.txt)|*.txt|All(*.*)|*",
+                FileName = $"{hvSample.Text}_Riasunto",
+                InitialDirectory = path
             };
-            dataDialog.FileName = $"{hvSample.Text}_Riasunto";
-            dataDialog.InitialDirectory = path;
             if (dataDialog.ShowDialog() == true)
             {
                 System.IO.File.WriteAllLines(dataDialog.FileName, combined);
             }
 
-            //rawData.SelectAllCells();
-            //rawData.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            //ApplicationCommands.Copy.Execute(null, rawData);
-            //rawData.UnselectAllCells();
+            rawData.SelectAllCells();
+            rawData.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, rawData);
+            rawData.UnselectAllCells();
+            string result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue); //TODO: formatear rawData decimales
 
-            //using var workbook = new XLWorkbook();
-            //var worksheet = workbook.AddWorksheet("Dati");
+            result = result.Replace('"', ' ');
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            var dataExcel = new ExcelPackage();
+
+            var dataSheet = dataExcel.Workbook.Worksheets.Add("Dati");
+
+            var format = new ExcelTextFormat
+            {
+                Delimiter = ','
+            };
+
+            var ts = TableStyles.None;
+
+            dataSheet.Cells["A1"].LoadFromText(result, format, ts, true);
+
+            SaveFileDialog excelDialog = new SaveFileDialog
+            {
+                Filter = "Excel Files(*.xlsx)|*.xlsx|All(*.*)|*",
+                FileName = $"{hvSample.Text}_Dati.xlsx",
+                InitialDirectory = path
+            };
+            if (excelDialog.ShowDialog() == true)
+            {
+                dataExcel.SaveAs(new FileInfo(path + $"/{hvSample.Text}_Dati.xlsx"));
+            }
+
+            Clipboard.Clear();
+
+            Close();
         }
     }
 }

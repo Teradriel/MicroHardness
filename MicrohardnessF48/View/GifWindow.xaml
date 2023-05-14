@@ -1,0 +1,14 @@
+﻿<Window x:Class="MicroHardness.View.GifWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MicroHardness.View"
+        mc:Ignorable="d"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        Title="Is this just a fantasy?" Height="213" Width="400"
+        ResizeMode="NoResize">
+    <Grid>
+        <Image gif:ImageBehavior.AnimatedSource="/View/Assets/travolta.gif" />
+    </Grid>
+</Window>
