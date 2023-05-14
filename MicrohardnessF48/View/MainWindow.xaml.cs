@@ -1,29 +1,19 @@
-﻿using MicroHardness.Model;
+﻿using MathNet.Numerics;
+using MathNet.Numerics.Statistics;
+using Microhardness.View;
 using MicroHardness.Services;
 using Microsoft.Win32;
+using OfficeOpenXml;
+using OfficeOpenXml.Table;
+using ScottPlot;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using ScottPlot;
-using MathNet.Numerics.Statistics;
-using MathNet.Numerics;
-using OfficeOpenXml;
-using System.Windows.Media.Animation;
-using System.Data;
-using OfficeOpenXml.Table;
-using System.Globalization;
-using Microhardness.View;
 
 namespace MicroHardness.View
 {
