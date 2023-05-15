@@ -18,13 +18,10 @@ using System.Windows.Shapes;
 using ScottPlot;
 using MathNet.Numerics.Statistics;
 using MathNet.Numerics;
-using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
 using ClosedXML.Excel;
-using System.ComponentModel;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using MathNet.Numerics.LinearAlgebra.Factorization;
 using Microhardness.View;
+using System.Data;
+using DataTable = System.Data.DataTable;
 
 namespace MicroHardness.View
 {
@@ -54,11 +51,13 @@ namespace MicroHardness.View
 
         public void LoadCsv_Click(object sender, RoutedEventArgs e)
         {
+            string microPath = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023";
+            //string microPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             OpenFileDialog openFileDialog = new()
             {
-                Filter = "CSV Files only (*.csv)|*.csv"
+                Filter = "CSV Files only (*.csv)|*.csv",
+                InitialDirectory = microPath,
             };
-            openFileDialog.InitialDirectory = Environment.CurrentDirectory;
             if (openFileDialog.ShowDialog() == true)
             {
                 string path = openFileDialog.FileName;
@@ -127,21 +126,27 @@ namespace MicroHardness.View
                 var boxPlot = BoxPlot.Plot.AddPopulation(pop);
                 boxPlot.DistributionCurve = false;
                 boxPlot.ErrorBarAlignment = ScottPlot.HorizontalAlignment.Center;
+                BoxPlot.Configuration.LeftClickDragPan = false;
+                BoxPlot.Configuration.MiddleClickAutoAxis = false;
+                BoxPlot.Configuration.Zoom = false;
                 BoxPlot.Plot.Title($"{sampleCode}");
                 BoxPlot.Plot.YLabel("HV");
                 BoxPlot.Plot.XAxis.Ticks(false);
 
-                var linePlot = LinePlot.Plot.AddScatter(xAxis, hvStatistics);
+                BoxPlot.Refresh();
+
+                var linePlot = LinePlot.Plot.AddScatterLines(xAxis, hvStatistics);
                 linePlot.LineWidth = 4;
                 LinePlot.Plot.AddHorizontalLine(mean);
-                LinePlot.Plot.YAxis.SetZoomInLimit(100);
-                LinePlot.Plot.YAxis.SetZoomOutLimit(100);
+                LinePlot.Plot.SetAxisLimits(-1, pointCount + 1, 0, max * 1.1);
+                LinePlot.Configuration.LeftClickDragPan = false;
+                LinePlot.Configuration.MiddleClickAutoAxis = false;
+                LinePlot.Configuration.Zoom = false;
                 LinePlot.Plot.Title($"{sampleCode}");
                 LinePlot.Plot.YLabel("HV");
                 LinePlot.Plot.XLabel("Prova");
                 LinePlot.Plot.XAxis.ManualTickPositions(xAxis, xAxisString);
 
-                BoxPlot.Refresh();
                 LinePlot.Refresh();
             }
         }
@@ -150,9 +155,14 @@ namespace MicroHardness.View
         {
             if (hvSample.Text == "") return;
 
-            //string path = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023" + $"{hvSample.Text}";
             string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
             Directory.CreateDirectory(path);
+
+            TabControl.SetIsSelected(LineTab, true);
+            MessageBox.Show("LinePlot stampato", "Avviso", MessageBoxButton.OK);
+            TabControl.SetIsSelected(BoxTab, true);
+            MessageBox.Show("LinePlot stampato", "Avviso", MessageBoxButton.OK);
+
             LinePlot.Plot.SaveFig(path + $"/{hvSample.Text}_LinePlot.png");
 
             BoxPlot.Plot.SaveFig(path + $"/{hvSample.Text}_BoxPlot.png");
@@ -197,31 +207,13 @@ namespace MicroHardness.View
 
             System.IO.File.WriteAllLines(path + $"/{hvSample.Text}_Riasunto.txt", combined);
 
-            rawData.SelectAllCells();
-            rawData.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            ApplicationCommands.Copy.Execute(null, rawData);
-            rawData.UnselectAllCells();
-
-            Excel.Application xlexcel;
-            Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
-            object misValue = System.Reflection.Missing.Value;
-            xlexcel = new Excel.Application
-            {
-                Visible = true
-            };
-            xlWorkBook = xlexcel.Workbooks.Add(misValue);
-            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-            Excel.Range CR = (Excel.Range)xlWorkSheet.Cells[1, 1];
-            CR.Select();
-            xlWorkSheet.PasteSpecial(CR, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true);
-
-            xlWorkBook.SaveAs(path + $"/{hvSample.Text}_Dati.xlsx", Excel.XlFileFormat.xlWorkbookDefault, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            xlexcel.DisplayAlerts = true;
-            xlWorkBook.Close(true, misValue, misValue);
-            xlexcel.Quit();
-
-            Clipboard.Clear();
+            using var book = new XLWorkbook();
+            var worksheet = book.AddWorksheet("Dati");
+            worksheet.Cell("A1").Value = "Prova";
+            worksheet.Cell("B1").Value = "HV";
+            worksheet.Cell("C1").Value = "Diag. Media";
+            worksheet.Cell("A2").InsertData(rawData.ItemsSource as IEnumerable<ProvaHV>);
+            book.SaveAs(path + $"/{hvSample.Text}_Dati.xlsx");
         }
     }
 }
