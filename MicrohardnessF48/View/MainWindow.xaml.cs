@@ -89,19 +89,19 @@ namespace MicroHardness.View
 
                 var pop = new ScottPlot.Statistics.Population(hvStatistics);
 
-                double mean = pop.mean.Round(2);
+                double mean = Statistics.Mean(hvStatistics).Round(2);
                 string meanString = mean.ToString();
-                double std = pop.stdErr.Round(2);
+                double std = Statistics.StandardDeviation(hvStatistics).Round(2);
                 string stdString = std.ToString();
-                double q25 = pop.Q1.Round(2);
+                double q25 = Statistics.LowerQuartile(hvStatistics).Round(2);
                 string q25String = q25.ToString();
-                double q75 = pop.Q3.Round(2);
+                double q75 = Statistics.UpperQuartile(hvStatistics).Round(2);
                 string q75String = q75.ToString();
-                double max = pop.max.Round(2);
+                double max = Statistics.Maximum(hvStatistics).Round(2);
                 string maxString = max.ToString();
-                double min = pop.min.Round(2);
+                double min = Statistics.Minimum(hvStatistics).Round(2);
                 string minString = min.ToString();
-                double median = pop.median.Round(2);
+                double median = Statistics.Median(hvStatistics).Round(2);
                 string medianString = median.ToString();
 
                 hvSample.Text = $"{sampleCode}";
@@ -140,7 +140,7 @@ namespace MicroHardness.View
             if (hvSample.Text == "") return;
 
             //string path = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023" + $"{hvSample.Text}";
-            //string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
+            //string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
 
             SaveFileDialog saveAll = new SaveFileDialog
             {
@@ -190,7 +190,7 @@ namespace MicroHardness.View
 
                     combined.Add(string.Format("{0} {1}", firstColumn, secondColumn));
                 }
-                System.IO.File.WriteAllLines(path + $"/{hvSample.Text}_Riasunto.txt", combined);
+                File.WriteAllLines(path + $"/{hvSample.Text}_Riasunto.txt", combined);
 
                 rawData.SelectAllCells();
                 rawData.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;

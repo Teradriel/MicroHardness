@@ -24,7 +24,6 @@
     <None Remove="View\Assets\mail.png" />
     <None Remove="View\Assets\matres.jpg" />
     <None Remove="View\Assets\travolta.gif" />
-    <None Remove="View\vickers.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,10 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="View\Assets\github.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -68,9 +63,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="View\Assets\travolta.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="View\vickers.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

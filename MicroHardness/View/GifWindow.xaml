@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         Title="Is this just a fantasy?" Height="213" Width="400"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Image gif:ImageBehavior.AnimatedSource="/View/Assets/travolta.gif" />
     </Grid>

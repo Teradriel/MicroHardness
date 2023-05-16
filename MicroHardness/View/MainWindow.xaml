@@ -7,7 +7,8 @@
         xmlns:ScottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
         mc:Ignorable="d"
         Title="MicroHardness" Height="600" Width="600"
-        ResizeMode="NoResize">
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />

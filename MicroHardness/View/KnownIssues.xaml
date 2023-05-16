@@ -5,24 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Microhardness.View"
         mc:Ignorable="d"
-        Title="KnownIssues" Height="450" Width="800">
+        Title="KnownIssues" Height="450" Width="800"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <StackPanel>
-            <TextBlock Text="Known Issues:" FontSize="40" />
-            <TextBlock Text="- Charts only prints if tab is selected first"
-                       FontSize="25" />
+        <StackPanel Margin="20">
+            <TextBlock Text="Known Issues:"
+                       FontSize="30" />
+            <TextBlock Text="- Charts only prints if tab is selected first. Solved by prompting a message before saving the figure."
+                       FontSize="20"
+                       TextWrapping="Wrap" />
         </StackPanel>
         <Button Content="OK"
                 Grid.Row="1"
-                Height="50"
                 HorizontalAlignment="Center"
-                Width=" 150"
-                Margin="50"
-                Click="Close_Click"
-                FontSize="25" />
+                Width="150"
+                Click="Close_Click" Margin="0,0,0,20" />
     </Grid>
 </Window>

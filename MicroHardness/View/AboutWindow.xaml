@@ -5,19 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MicroHardness.View"
         mc:Ignorable="d"
-        Title="AboutWindow" Height="250" Width="400">
+        Title="AboutWindow" Height="250" Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
     <Grid>
         <StackPanel VerticalAlignment="Center"
                     HorizontalAlignment="Center">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Margin" Value="0 10 0 0" />
+                </Style>
+            </StackPanel.Resources>
             <TextBlock Text="Made with love, sweat and blood by Luca Terzariol"
-                       FontSize="16" />
-            <TextBlock Text="MATRES SCRL"
+                       FontSize="16"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"
+                       Margin="0 0 0 0" />
+            <TextBlock Text="Only for MATRES SCRL"
                        FontSize="16"
                        HorizontalAlignment="Center" />
             <TextBlock Text="All lefts reserved"
                        HorizontalAlignment="Center" />
             <TextBlock Text="For more information please contact me:"
-                       Margin="0 50 0 0"
                        HorizontalAlignment="Center" />
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
@@ -26,7 +35,8 @@
                                TextDecorations="None"
                                NavigateUri="mailto:luca.terzariol@outlook.com"
                                RequestNavigate="OnNavigate">
-                        <Image Source="/View/Assets/mail.png"  Height="25" />
+                        <Image Source="/View/Assets/mail.png"
+                               Height="25" />
                     </Hyperlink>
                 </TextBlock>
                 <TextBlock Margin="15 5">
@@ -38,7 +48,7 @@
                     </Hyperlink>
                 </TextBlock>
             </StackPanel>
-            <TextBlock HorizontalAlignment="Center" Margin="0 35 0 0">
+            <TextBlock HorizontalAlignment="Center">
                 You can edit the source code visiting
                 <Hyperlink
                     Click="Gif_Link"
@@ -46,6 +56,12 @@
                     this link
                 </Hyperlink>
             </TextBlock>
+            <Button Content="Close"
+                    Click="OK_click"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="150"
+                    Margin="0,10,0,0" />
         </StackPanel>
     </Grid>
 </Window>

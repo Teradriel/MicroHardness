@@ -22,5 +22,10 @@ namespace MicroHardness.View
             Process.Start(new ProcessStartInfo { FileName = e.Uri.AbsoluteUri, UseShellExecute = true });
             e.Handled = true;
         }
+
+        private void OK_click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
