@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MicroHardness"
         xmlns:ScottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
         mc:Ignorable="d"
-        Title="MicroHardness" Height="600" Width="600"
+        Title="MicroHardness v1.0.1" Height="600" Width="600"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen">
     <Grid>
@@ -95,6 +95,8 @@
                                        HorizontalAlignment="Right" />
                             <TextBlock Text="Quantità di misure: "
                                        HorizontalAlignment="Right" />
+                            <TextBlock Text="Relative Dev. Std.: "
+                                       HorizontalAlignment="Right" />
                         </StackPanel>
                         <StackPanel Grid.Column="1">
                             <TextBox x:Name="hvSample" IsReadOnly="True"
@@ -112,6 +114,8 @@
                             <TextBox x:Name="hvMedian" IsReadOnly="True"
                                      BorderThickness="0" />
                             <TextBox x:Name="hvPointCount" IsReadOnly="True"
+                                     BorderThickness="0" />
+                            <TextBox x:Name="hvRSD" IsReadOnly="True"
                                      BorderThickness="0" />
                         </StackPanel>
                     </Grid>

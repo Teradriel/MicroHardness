@@ -1,6 +1,6 @@
 ﻿namespace MicroHardness.Model
 {
-    public class ProvaHV
+    public class TestHV
     {
         public int Test { get; set; }
         public float HV { get; set; }

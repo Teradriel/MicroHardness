@@ -8,14 +8,14 @@ namespace MicroHardness.Services
 {
     public static class HVService
     {
-        public static List<ProvaHV> ReadFile(string path)
+        public static List<TestHV> ReadFile(string path)
         {
             var lines = File.ReadAllLines(path);
             var lastLine = File.ReadAllLines(path).Length;
 
             var data = from line in lines.Skip(29).Take(lastLine - 30)
                        let split = line.Split(',')
-                       select new ProvaHV
+                       select new TestHV
                        {
                            Test = int.Parse(split[2]),
                            HV = float.Parse(split[5], CultureInfo.InvariantCulture),
@@ -30,7 +30,7 @@ namespace MicroHardness.Services
             var lines = File.ReadAllLines(path);
             var lastLine = File.ReadAllLines(path).Length;
 
-            List<double> hv = new List<double>();
+            List<double> hv = new();
 
             foreach (var line in lines.Skip(29).Take(lastLine - 30))
             {

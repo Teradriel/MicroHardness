@@ -18,6 +18,8 @@ namespace MicroHardness.View
 {
     public partial class MainWindow : System.Windows.Window
     {
+        public string? SamplePath { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -25,7 +27,7 @@ namespace MicroHardness.View
 
         private void Issues_Click(object sender, RoutedEventArgs e)
         {
-            KnownIssues knownIssues = new KnownIssues();
+            KnownIssues knownIssues = new();
             knownIssues.ShowDialog();
         }
 
@@ -42,8 +44,12 @@ namespace MicroHardness.View
 
         public void LoadCsv_Click(object sender, RoutedEventArgs e)
         {
+            //this is the path for release
             string microPath = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023";
+
+            //this is the path for debugging
             //string microPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
             OpenFileDialog openFileDialog = new()
             {
                 Filter = "CSV Files only (*.csv)|*.csv",
@@ -51,18 +57,31 @@ namespace MicroHardness.View
             };
             if (openFileDialog.ShowDialog() == true)
             {
-                string path = openFileDialog.FileName;
+                string sample = openFileDialog.FileName;
                 string sampleCode = openFileDialog.SafeFileName;
+
+                SamplePath = Path.GetDirectoryName(openFileDialog.FileName);
+
                 int removeExt = sampleCode.LastIndexOf(".");
                 if (removeExt > 0) sampleCode = sampleCode.Remove(removeExt);
-                rawData.DataContext = HVService.ReadFile(path);
-                double[] hvArray = HVService.Results(path);
+                rawData.DataContext = HVService.ReadFile(sample);
+                double[] hvArray = HVService.Results(sample);
 
                 double[] hvStatistics = hvArray;
 
-                double quantileBottom = hvArray.Quantile(0.15);
+                //RSD = relative standard deviation
+                //Is a measure of the dispersion of a probability distribution.
+                //Dividing the standard deviation by the mean of the data provides the relative magnitude of the standard deviation
+                double RSD = hvArray.StandardDeviation() / hvArray.Mean();
 
-                double quantileUpper = hvArray.Quantile(0.85);
+                if (RSD > 0.15)
+                {
+                    RSD = 0.15;
+                }
+
+                double quantileBottom = hvArray.Quantile(RSD);
+
+                double quantileUpper = hvArray.Quantile(1 - RSD);
 
                 for (int i = 0; i < hvArray.Length; i++)
                 {
@@ -90,20 +109,22 @@ namespace MicroHardness.View
 
                 var pop = new ScottPlot.Statistics.Population(hvStatistics);
 
-                double mean = Statistics.Mean(hvStatistics).Round(2);
+                double mean = Statistics.Mean(hvStatistics).Round(0);
                 string meanString = mean.ToString();
-                double std = Statistics.StandardDeviation(hvStatistics).Round(2);
+                double std = Statistics.StandardDeviation(hvStatistics).Round(0);
                 string stdString = std.ToString();
-                double q25 = Statistics.LowerQuartile(hvStatistics).Round(2);
+                double q25 = Statistics.LowerQuartile(hvStatistics).Round(0);
                 string q25String = q25.ToString();
-                double q75 = Statistics.UpperQuartile(hvStatistics).Round(2);
+                double q75 = Statistics.UpperQuartile(hvStatistics).Round(0);
                 string q75String = q75.ToString();
-                double max = Statistics.Maximum(hvStatistics).Round(2);
+                double max = Statistics.Maximum(hvStatistics).Round(0);
                 string maxString = max.ToString();
-                double min = Statistics.Minimum(hvStatistics).Round(2);
+                double min = Statistics.Minimum(hvStatistics).Round(0);
                 string minString = min.ToString();
-                double median = Statistics.Median(hvStatistics).Round(2);
+                double median = Statistics.Median(hvStatistics).Round(0);
                 string medianString = median.ToString();
+
+                RSD *= 100;
 
                 hvSample.Text = $"{sampleCode}";
                 hvMeanStd.Text = $"{meanString} ± {stdString}";
@@ -113,6 +134,7 @@ namespace MicroHardness.View
                 hvMin.Text = $"{minString}";
                 hvMedian.Text = $"{medianString}";
                 hvPointCount.Text = $"{pointCount}";
+                hvRSD.Text = $"{RSD}%";
 
                 var boxPlot = BoxPlot.Plot.AddPopulation(pop);
                 boxPlot.DistributionCurve = false;
@@ -146,17 +168,25 @@ namespace MicroHardness.View
         {
             if (hvSample.Text == "") return;
 
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
-            Directory.CreateDirectory(path);
+            string? savePath;
+            if (SamplePath != null)
+            {
+                savePath = Path.Combine(SamplePath, $"{hvSample.Text}");
+            }
+            else
+            {
+                savePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{hvSample.Text}");
+            }
+            Directory.CreateDirectory(savePath);
 
             TabControl.SetIsSelected(LineTab, true);
             MessageBox.Show("LinePlot stampato", "Avviso", MessageBoxButton.OK);
             TabControl.SetIsSelected(BoxTab, true);
             MessageBox.Show("BoxPlot stampato", "Avviso", MessageBoxButton.OK);
 
-            LinePlot.Plot.SaveFig(path + $"/{hvSample.Text}_LinePlot.png");
+            LinePlot.Plot.SaveFig(savePath + $"/{hvSample.Text}_LinePlot.png");
 
-            BoxPlot.Plot.SaveFig(path + $"/{hvSample.Text}_BoxPlot.png");
+            BoxPlot.Plot.SaveFig(savePath + $"/{hvSample.Text}_BoxPlot.png");
 
             TabControl.SetIsSelected(Data, true);
 
@@ -196,15 +226,15 @@ namespace MicroHardness.View
                 combined.Add(string.Format("{0} {1}", firstColumn, secondColumn));
             }
 
-            File.WriteAllLines(path + $"/{hvSample.Text}_Riasunto.txt", combined);
+            File.WriteAllLines(savePath + $"/{hvSample.Text}_Riassunto.txt", combined);
 
             using var book = new XLWorkbook();
             var worksheet = book.AddWorksheet("Dati");
             worksheet.Cell("A1").Value = "Prova";
             worksheet.Cell("B1").Value = "HV";
             worksheet.Cell("C1").Value = "Diag. Media";
-            worksheet.Cell("A2").InsertData(rawData.ItemsSource as IEnumerable<ProvaHV>);
-            book.SaveAs(path + $"/{hvSample.Text}_Dati.xlsx");
+            worksheet.Cell("A2").InsertData(rawData.ItemsSource as IEnumerable<TestHV>);
+            book.SaveAs(savePath + $"/{hvSample.Text}_Dati.xlsx");
         }
     }
 }

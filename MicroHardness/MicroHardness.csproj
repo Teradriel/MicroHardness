@@ -9,6 +9,7 @@
 	<PublishSingleFile>true</PublishSingleFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationIcon>View\Assets\hardness.ico</ApplicationIcon>
+    <Title>HV 2023</Title>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -29,7 +30,7 @@
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">
       <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>9</VersionMinor>
+      <VersionMinor>0</VersionMinor>
       <VersionMajor>1</VersionMajor>
       <Guid>00020813-0000-0000-c000-000000000046</Guid>
       <Lcid>0</Lcid>
