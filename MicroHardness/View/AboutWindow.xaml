@@ -21,7 +21,7 @@
                        TextAlignment="Center"
                        TextWrapping="Wrap"
                        Margin="0 0 0 0" />
-            <TextBlock Text="v1.0.1 - Only for MATRES SCRL"
+            <TextBlock Text="v1.0.2 - Only for MATRES SCRL"
                        FontSize="16"
                        HorizontalAlignment="Center" />
             <TextBlock Text="All lefts reserved"

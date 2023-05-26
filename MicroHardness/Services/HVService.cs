@@ -10,6 +10,7 @@ namespace MicroHardness.Services
     {
         public static List<TestHV> ReadFile(string path)
         {
+            //The program reads the file and pass the data to the main window
             var lines = File.ReadAllLines(path);
             var lastLine = File.ReadAllLines(path).Length;
 
@@ -27,6 +28,7 @@ namespace MicroHardness.Services
 
         public static double[] Results(string path)
         {
+            //The program reads the file and uses only the data for calulations
             var lines = File.ReadAllLines(path);
             var lastLine = File.ReadAllLines(path).Length;
 

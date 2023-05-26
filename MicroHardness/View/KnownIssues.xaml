@@ -11,9 +11,17 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <StackPanel Margin="20">
+            <TextBlock Text="Update notes:"
+                       FontSize="30" />
+            <TextBlock Text="- Fix: Now you don't need to exit the program to make another set of measures."
+                       FontSize="20"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+        <StackPanel Margin="20" Grid.Row="1">
             <TextBlock Text="Known Issues:"
                        FontSize="30" />
             <TextBlock Text="- Charts only prints if tab is selected first. Solved by prompting a message before saving the figure."
@@ -21,7 +29,7 @@
                        TextWrapping="Wrap" />
         </StackPanel>
         <Button Content="OK"
-                Grid.Row="1"
+                Grid.Row="2"
                 HorizontalAlignment="Center"
                 Width="150"
                 Click="Close_Click" Margin="0,0,0,20" />
