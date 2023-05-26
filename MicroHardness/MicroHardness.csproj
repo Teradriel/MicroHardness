@@ -52,7 +52,7 @@
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.101.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.63" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.64" />
     <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
