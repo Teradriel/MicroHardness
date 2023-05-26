@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Microhardness.View"
         mc:Ignorable="d"
-        Title="KnownIssues" Height="450" Width="800"
+        Title="Known Issues" Height="450" Width="800"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen">
     <Grid>

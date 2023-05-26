@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MicroHardness"
         xmlns:ScottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
         mc:Ignorable="d"
-        Title="MicroHardness v1.0.2" Height="600" Width="600"
+        Title="HV 2023 v1.0.2" Height="600" Width="600"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen">
     <Grid>

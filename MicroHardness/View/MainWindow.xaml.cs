@@ -1,5 +1,4 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using MathNet.Numerics;
 using MathNet.Numerics.Statistics;
 using Microhardness.View;
@@ -87,10 +86,10 @@ namespace MicroHardness.View
             rawData.Items.Refresh();
 
             //This is the path for release
-            //microPath = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023";
+            microPath = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023";
 
             //This is the path for debugging
-            microPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            //microPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             OpenFileDialog openFileDialog = new()
             {

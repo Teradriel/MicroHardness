@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MicroHardness.View"
         mc:Ignorable="d"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        Title="Is this just a fantasy?" Height="213" Width="400"
+        Title="Is this real or just a fantasy?" Height="213" Width="400"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <Grid>
