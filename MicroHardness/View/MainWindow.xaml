@@ -22,7 +22,7 @@
         <Image Source="/View/Assets/matres.jpg" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" />
 
         <TextBlock Grid.Column="1"
-                   FontSize="30"
+                   FontSize="27"
                    Text="Analisi dei dati di microdurezza"
                    HorizontalAlignment="Center"
                    TextAlignment="Center"
