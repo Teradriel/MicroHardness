@@ -21,19 +21,22 @@
                        TextAlignment="Center"
                        TextWrapping="Wrap"
                        Margin="0 0 0 0" />
-            <TextBlock Text="v1.0.2 - Only for MATRES SCRL"
+            <TextBlock Text="(@Teradriel)"
                        FontSize="16"
-                       HorizontalAlignment="Center" />
-            <TextBlock Text="All lefts reserved"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"
+                       Margin="0 0 0 0" />
+            <TextBlock Text="v1.0.2"
+                       FontSize="16"
                        HorizontalAlignment="Center" />
             <TextBlock Text="For more information please contact me:"
                        HorizontalAlignment="Center" />
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <TextBlock Margin="15 5">
-                    <Hyperlink ToolTip="luca.terzariol@outlook.com"
+                    <Hyperlink ToolTip="inglterzariol@gmail.com"
                                TextDecorations="None"
-                               NavigateUri="mailto:luca.terzariol@outlook.com"
+                               NavigateUri="mailto:inglterzariol@gmail.com"
                                RequestNavigate="OnNavigate">
                         <Image Source="/View/Assets/mail.png"
                                Height="25" />
@@ -49,7 +52,7 @@
                 </TextBlock>
             </StackPanel>
             <TextBlock HorizontalAlignment="Center">
-                You can edit the source code visiting
+                You can convert this automatically to MVVM using
                 <Hyperlink
                     Click="Gif_Link"
                     ToolTip="WOW! very changes, many code, such window">

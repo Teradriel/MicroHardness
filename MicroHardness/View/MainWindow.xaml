@@ -19,7 +19,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <Image Source="/View/Assets/matres.jpg" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" />
+        <Image Source="/View/Assets/hardness.png" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
         <TextBlock Grid.Column="1"
                    FontSize="27"

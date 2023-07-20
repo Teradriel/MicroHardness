@@ -23,18 +23,11 @@
   <ItemGroup>
     <None Remove="View\Assets\github.png" />
     <None Remove="View\Assets\mail.png" />
-    <None Remove="View\Assets\matres.jpg" />
     <None Remove="View\Assets\travolta.gif" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="View\Assets\hardness.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="View\Assets\matres.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
   <ItemGroup>

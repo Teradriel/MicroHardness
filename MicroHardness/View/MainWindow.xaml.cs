@@ -59,13 +59,13 @@ namespace MicroHardness.View
             string sampleCode = "";
             SamplePath = "";
             double[] hvArray = Array.Empty<double>();
-            double[] hvStatistics = Array.Empty<double>();
+            double[] hvStatistics;
             double RSD = 0;
             double quantileBottom = 0;
             double quantileUpper = 0;
-            double[] xAxis = Array.Empty<double>();
-            double[] xAxisDouble = Array.Empty<double>();
-            string[] xAxisString = Array.Empty<string>();
+            double[] xAxis;
+            double[] xAxisDouble;
+            string[] xAxisString;
             BoxPlot.Plot.Clear();
             LinePlot.Plot.Clear();
             double mean = 0;
