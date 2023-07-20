@@ -85,11 +85,8 @@ namespace MicroHardness.View
             int pointCount = 0;
             rawData.Items.Refresh();
 
-            //This is the path for release
-            microPath = @"\\svr2012\Laboratorio Analisi\Dati Strumenti\Microdurometro\2023";
-
-            //This is the path for debugging
-            //microPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            //Default path
+            microPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             OpenFileDialog openFileDialog = new()
             {
